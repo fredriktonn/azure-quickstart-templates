@@ -44,7 +44,12 @@ Invoke-Command -ScriptBlock $sb -ComputerName $env:COMPUTERNAME -Credential $cre
 
 #"Install each Chocolatey Package"
 $chocoPackages.Split(";") | ForEach {
-    $command = "cinst " + $_ + " -y -force"
+    $package = $_
+    if( $package -eq "solr" )
+    {
+        $package = "solr --version 6.6.2"
+    }
+    $command = "cinst " + $package + " -y -force"
     $command | Out-File $LogFile -Append
     $sb = [scriptblock]::Create("$command")
 
