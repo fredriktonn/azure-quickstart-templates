@@ -49,7 +49,7 @@ $chocoPackages.Split(";") | ForEach {
     {
         $package = "solr --version 6.6.2"
     }
-    $command = "choco install " + $package + " -y -force"
+    $command = "C:\ProgramData\chocolatey\bin\choco install " + $package + " -y -force"
     $command | Out-File $LogFile -Append
     $sb = [scriptblock]::Create("$command")
 
