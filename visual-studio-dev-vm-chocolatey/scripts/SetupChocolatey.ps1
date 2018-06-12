@@ -49,12 +49,19 @@ $chocoPackages.Split(";") | ForEach {
     {
         $package = "solr --version 6.6.2"
     }
-    $command = "cinst " + $package + " -y -force"
+    $command = "choco install " + $package + " -y -force"
     $command | Out-File $LogFile -Append
     $sb = [scriptblock]::Create("$command")
 
     # Use the current user profile
-    Invoke-Command -ScriptBlock $sb -ArgumentList $chocoPackages -ComputerName $env:COMPUTERNAME -Credential $credential | Out-Null
+    try
+    {
+        Invoke-Command -ScriptBlock $sb -ComputerName $env:COMPUTERNAME -Credential $credential | Out-Null
+    }
+    catch
+    {
+        $_.Exception | format-list -force | Out-File $LogFile -Append
+    }
 }
 
 Disable-PSRemoting -Force
